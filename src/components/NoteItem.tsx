@@ -1,26 +1,26 @@
 import { useState } from 'react';
 
-import { Box, Button, Paper, Stack, TextField, Typography, useTheme } from '@mui/material';
+import { Box, Button, Checkbox, FormControlLabel, Paper, Stack, TextField, Typography, useTheme } from '@mui/material';
 import { AccessTime, Description } from '@mui/icons-material';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import { red } from '@mui/material/colors';
 
-import store from '../stores/TasksStore';
+import store from '../stores/NotesStore';
 
-import { Task } from '../types';
+import { Note } from '../types';
 
-type TaskItemProps = {
-    task: Task;
+type NoteItemProps = {
+    note: Note;
 }
 
-const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
+const NoteItem: React.FC<NoteItemProps> = ({ note }) => {
     const theme = useTheme();
 
     const [isEditing, setIsEditing] = useState(false);
-    const [editedTitle, setEditedTitle] = useState(task.title);
-    const [editedDescription, setEditedDescription] = useState(task.description);
+    const [editedTitle, setEditedTitle] = useState(note.title);
+    const [editedDescription, setEditedDescription] = useState(note.description);
 
-    const formattedDate = new Date(task.createdAt).toLocaleDateString('ru-RU', {
+    const formattedDate = new Date(note.createdAt).toLocaleDateString('ru-RU', {
         weekday: 'long',
         year: 'numeric',
         month: 'long',
@@ -28,19 +28,23 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
     });
 
     const removeTask = () => {
-        store.removeTask(task.id);
+        store.removeNote(note.id);
     }
 
 
     const saveChanges = () => {
-        store.updateTask(task.id, { title: editedTitle, description: editedDescription });
+        store.updateNote(note.id, { title: editedTitle, description: editedDescription });
         setIsEditing(false);
     }
 
     const stopEditing = () => {
-        setEditedTitle(task.title);
-        setEditedDescription(task.description);
+        setEditedTitle(note.title);
+        setEditedDescription(note.description);
         setIsEditing(false);
+    }
+
+    const toggleCompleted = () => {
+        store.updateNote(note.id, { completed: !note.completed });
     }
 
 
@@ -83,7 +87,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
                                 color: theme.palette.primary.main,
                             }}
                         >
-                            {task.title}
+                            {note.title}
                         </Typography>
                     )}
                     <Stack
@@ -94,6 +98,15 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
                             direction="row"
                             alignItems="center"
                             gap={0.5}>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={note.completed}
+                                        onChange={toggleCompleted}
+                                    />
+                                }
+                                label="Завершено"
+                            />
                             <AccessTime
                                 sx={{ color: theme.palette.text.primary }} />
                             <Typography
@@ -134,7 +147,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
                             <Stack direction="row" alignItems="center" gap={0.5}>
                                 <Description sx={{ color: theme.palette.text.primary }} />
                                 <Typography variant="body1" sx={{ wordBreak: "break-word", color: theme.palette.text.primary }}>
-                                    {task.description}
+                                    {note.description}
                                 </Typography>
                             </Stack>
                         )}
@@ -158,4 +171,4 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
     );
 };
 
-export default TaskItem;
+export default NoteItem;

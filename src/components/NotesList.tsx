@@ -1,12 +1,13 @@
 import { Stack } from '@mui/material';
 
-import TaskItem from "./TaskItem";
+import NoteItem from './NoteItem';
 
 import { observer } from 'mobx-react';
-import store from '../stores/TasksStore';
+import store from '../stores/NotesStore';
 
-const TaskList: React.FC = observer(() => {
-    const tasks = store.tasks;
+const NotesList: React.FC = observer(() => {
+    const notes = store.notes;
+
     return (
         <Stack
             alignItems="center"
@@ -14,9 +15,9 @@ const TaskList: React.FC = observer(() => {
             sx={{
                 width: "100%"
             }}>
-            {tasks.map(task => <TaskItem task={task} key={task.id} />)}
+            {notes.map(note => <NoteItem note={note} key={note.id} />)}
         </Stack>
     );
 });
 
-export default TaskList;
+export default NotesList;

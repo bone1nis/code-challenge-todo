@@ -1,6 +1,7 @@
-export type Task = {
+export type Note = {
     id: string;
     title: string;
     description: string;
     createdAt: number;
+    completed: boolean;
 }

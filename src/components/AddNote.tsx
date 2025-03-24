@@ -3,23 +3,24 @@ import { FormEvent, useState } from 'react';
 import { Button, Stack, TextField } from '@mui/material';
 
 import { observer } from 'mobx-react-lite';
-import store from '../stores/TasksStore';
+import store from '../stores/NotesStore';
 
-const AddTask: React.FC = observer(() => {
+const AddNote: React.FC = observer(() => {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
         if (title && description) {
-            const newTask = {
+            const newNote = {
                 id: crypto.randomUUID(),
                 title,
                 description,
-                createdAt: Date.now()
+                createdAt: Date.now(),
+                completed: false
             }
 
-            store.addTask(newTask)
+            store.addNote(newNote)
         }
     }
 
@@ -43,10 +44,10 @@ const AddTask: React.FC = observer(() => {
                 type="submit"
                 variant="contained"
                 color="primary">
-                Add
+                Добавить
             </Button>
         </Stack>
     );
 });
 
-export default AddTask;
+export default AddNote;
