@@ -25,7 +25,11 @@ const AddNote: React.FC = observer(() => {
     }
 
     return (
-        <Stack component="form" direction="row" gap={4} onSubmit={handleSubmit}>
+        <Stack
+            component="form"
+            direction={{xs: "column", sm: "row"}}
+            gap={4}
+            onSubmit={handleSubmit}>
             <TextField
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}

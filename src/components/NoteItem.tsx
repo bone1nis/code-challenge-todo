@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Box, Button, Checkbox, FormControlLabel, Paper, Stack, TextField, Typography, useTheme } from '@mui/material';
+import { Box, Button, Checkbox, FormControlLabel, Paper, Stack, TextField, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { AccessTime, Description } from '@mui/icons-material';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import { red } from '@mui/material/colors';
@@ -20,12 +20,14 @@ const NoteItem: React.FC<NoteItemProps> = ({ note }) => {
     const [editedTitle, setEditedTitle] = useState(note.title);
     const [editedDescription, setEditedDescription] = useState(note.description);
 
-    const formattedDate = new Date(note.createdAt).toLocaleDateString('ru-RU', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-    });
+
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
+    const formattedDate = new Date(note.createdAt).toLocaleDateString("ru-RU",
+        isSmallScreen
+            ? { day: "numeric", month: "short", year: "numeric" }
+            : { weekday: "long", year: "numeric", month: "long", day: "numeric" }
+    );
 
     const removeTask = () => {
         store.removeNote(note.id);
@@ -66,10 +68,9 @@ const NoteItem: React.FC<NoteItemProps> = ({ note }) => {
                 direction="column"
                 gap={2}>
                 <Stack
-                    direction="row"
+                    direction={{ xs: "column", md: "row" }}
                     justifyContent="space-between"
-                    alignItems="center"
-                    gap={10}>
+                    alignItems="center">
                     {isEditing ? (
                         <TextField
                             value={editedTitle}
